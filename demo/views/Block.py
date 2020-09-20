@@ -9,7 +9,7 @@ node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()
 
 
-class ChainList(APIView):
+class BlockList(APIView):
     # 返回整个区块链
     def get(self, request):
         response = {
@@ -44,6 +44,6 @@ class ChainList(APIView):
         return HttpResponse(json.dumps(response))
 
 
-class ChainDetail(APIView):
+class BlockDetail(APIView):
     def get(self, request):
         return None
