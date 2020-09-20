@@ -7,6 +7,7 @@ node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()
 
 
+# 告诉服务器去挖掘新的区块
 def mine(request):
     last_block = blockchain.last_block
     last_proof = last_block['proof']
@@ -32,6 +33,7 @@ def mine(request):
     return HttpResponse(json.dumps(response))
 
 
+# 创建一个交易并添加到区块
 def new_transaction(request):
     values = json.loads(request.body.decode('utf-8'))
     required = ['sender', 'recipient', 'amount']
@@ -43,6 +45,7 @@ def new_transaction(request):
     return HttpResponse(json.dumps(response))
 
 
+# 返回整个区块链
 def full_chain(request):
     response = {
         'chain': blockchain.chain,

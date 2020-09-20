@@ -4,8 +4,11 @@ from datetime import time
 from urllib.parse import urlparse
 from django.contrib.sites import requests
 
+'''
+    Blockchain类用来管理链条，它能存储交易，加入新块等。
+'''
 
-# Blockchain类用来管理链条，它能存储交易，加入新块等
+
 class Blockchain(object):
     def __init__(self):
         self.chain = []
@@ -13,19 +16,26 @@ class Blockchain(object):
         self.new_block(previous_hash=1, proof=100)
         self.nodes = set()
 
+    # Creates a new Block and adds it to the chain
     def new_block(self, proof, previous_hash=None):
+        # 一个区块的结构
         block = {
+            # 索引
             'index': len(self.chain) + 1,
+            # Unix时间戳
             'timestamp': time(),
+            # 交易列表
             'transactions': self.current_transactions,
+            # 工作量证明
             'proof': proof,
+            # 前一个区块的Hash值
             'previous_hash': previous_hash or self.hash(self.chain[-1]),
         }
         self.current_transactions = []
         self.chain.append(block)
         return block
 
-    # 向列表中添加一个交易记录，并返回该记录将被添加到的区块的索引
+    # Adds a new transaction to the list of transactions
     def new_transaction(self, sender, recipient, amount):
         self.current_transactions.append({
             'sender': sender,
@@ -34,11 +44,13 @@ class Blockchain(object):
         })
         return self.last_block['index'] + 1
 
+    # Hashes a Block
     @staticmethod
     def hash(block):
         block_string = json.dumps(block, sort_keys=True).encode()
         return hashlib.sha256(block_string).hexdigest()
 
+    # Returns the last Block in the chain
     @property
     def last_block(self):
         return self.chain[-1]
