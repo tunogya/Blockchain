@@ -75,7 +75,7 @@ GET /api/demo/transactions/
 查询某一区块的信息
 
 ### API 路径
-GET /api/demo/blocks/<pk>/
+GET /api/demo/blocks/\<pk\>/
 
     <pk>表示区块块高， “latest” 表示当前最新的区块
 
@@ -83,7 +83,7 @@ GET /api/demo/blocks/<pk>/
 查询某一交易的信息。
 
 ### API 路径
-GET /api/demo/transactions/<pk>/
+GET /api/demo/transactions/\<pk\>/
 
     <pk>为交易ID
 

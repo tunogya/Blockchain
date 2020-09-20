@@ -1,6 +1,7 @@
 # Blockchain 指南
-
 使用Django开发的区块链项目。
+
+**米奇币**
 
 ## REST API参考
 见[Readme.md](demo/Readme.md)
