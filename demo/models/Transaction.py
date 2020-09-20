@@ -17,14 +17,17 @@ class Transaction(models.Model):
         max_length=12,
         blank=True,
         null=True,
+        editable=False,
     )
 
     events = models.JSONField(
         '交易所产生的区块链事件列表',
+        editable=False,
     )
 
     data = models.JSONField(
         '交易的详细内容，数据结构为交易中的 common.Payload',
+        editable=False,
     )
 
     class Meta:
