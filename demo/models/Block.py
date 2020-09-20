@@ -37,6 +37,10 @@ class Block(models.Model):
         editable=False,
     )
 
+    proof = models.IntegerField(
+        '工作量证明',
+    )
+
     class Meta:
         verbose_name = "区块"
         verbose_name_plural = "所有区块"

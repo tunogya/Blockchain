@@ -7,7 +7,7 @@ from django.utils.encoding import smart_str
 class Event(models.Model):
     id = models.CharField(
         '事件ID，通道内唯一',
-        default=uuid.uuid1(),
+        default=uuid.uuid1,
         editable=False,
         max_length=36,
         primary_key=True,
