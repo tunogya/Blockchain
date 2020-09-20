@@ -42,6 +42,7 @@ class Blockchain(object):
     def last_block(self):
         return self.chain[-1]
 
+    # PoW
     def proof_of_work(self, last_proof):
         proof = 0
         while self.valid_proof(last_proof, proof) is False:
@@ -49,6 +50,7 @@ class Blockchain(object):
 
         return proof
 
+    # PoW验证，修改零开头的个数来控制难度
     @staticmethod
     def valid_proof(last_proof, proof):
         guess = str(last_proof * proof).encode()
