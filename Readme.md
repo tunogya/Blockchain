@@ -1,11 +1,11 @@
-Blockchain 指南
----
+# Blockchain 指南
+
 使用Django开发的区块链项目。
 
-# REST API参考
+## REST API参考
 见[Readme.md](demo/Readme.md)
 
-# Usage
+## Usage
 1. Change the ports in [docker-compose](docker-compose.yml) file.
 
     | application name | out-port | in-port |

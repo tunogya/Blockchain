@@ -1,22 +1,41 @@
-REST API参考
----
-# 使用REST-API
+# REST API参考
+
+## 1.使用REST-API
 您可以通过 REST API 调用智能合约，写入或查询链上信息，也可以查询区块及交易信息，并监听区块链事件。区块链 REST-API 使用 Bearer Token 的认证方
 式，在调用API时，您需要额外指定 HTTP 头 “Authorization: Bearer <Your Access Token>” 来提供您的 Access Token。
 
-## 生成 Access Token
+## 2.生成 Access Token
+### API 路径
+POST /api/auth/token/
 
-## 刷新 Access Token
+### 请求参数
+**Body**
 
-## 验证 Access Token
 
-# 发起上链交易
+## 3.刷新 Access Token
+### API 路径
+POST /api/auth/refresh/
+
+### 请求参数
+**Body**
+
+
+## 4.验证 Access Token
+### API 路径
+POST /api/auth/vertify/
+
+### 请求参数
+**Body**
+
+
+
+## 5.发起上链交易
 向区块链网络发送交易, 交易通过节点验证并被成功写入账本后返回。
 
-## API 路径
+### API 路径
 POST /api/demo/transactions/
 
-## 请求参数
+### 请求参数
 **URL Query**
 
 | URL Query 参数 | 类型    | 是否必选 | 描述                                 |
@@ -25,7 +44,6 @@ POST /api/demo/transactions/
 | content_check | String  | 否     | 内容合规检查，并根据检测结果拒绝该笔交易上链。默认值空，表示不检测。 |
 
 **返回结果**
-
 | 名称     | 类型      | 描述       |
 |---------|----------|------------|
 | Success | Boolean  | 请求是否成功 |
@@ -47,29 +65,29 @@ Response
 | event | List<Event>   |  交易所产生的区块链事件列表       |
 | data   | String | 经过Base64编码的链码返回数据 |
 
-# 发起查询交易
+## 6.发起查询交易
 查询区块链账本中的数据。
 
-## API 路径
+### API 路径
 GET /api/demo/transactions/
 
-# 查询区块
+## 7.查询区块
 查询某一区块的信息
 
-## API 路径
+### API 路径
 GET /api/demo/blocks/<pk>/
 
     <pk>表示区块块高， “latest” 表示当前最新的区块
 
-# 查询交易信息
+## 8.查询交易信息
 查询某一交易的信息。
 
-## API 路径
+### API 路径
 GET /api/demo/transactions/<pk>/
 
     <pk>为交易ID
 
-## 返回结果
+### 返回结果
 Transaction
 | 名称        | 类型      | 描述         |
 |------------|----------|--------------|
