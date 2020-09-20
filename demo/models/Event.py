@@ -36,7 +36,7 @@ class Event(models.Model):
 
     class Meta:
         verbose_name = '事件'
-        verbose_name_plural = verbose_name
+        verbose_name_plural = '所有事件'
 
     def __str__(self):
         return smart_str('%s-%s' % (self.type, self.name))

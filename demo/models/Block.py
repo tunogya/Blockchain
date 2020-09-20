@@ -33,7 +33,7 @@ class Block(models.Model):
 
     class Meta:
         verbose_name = "区块"
-        verbose_name_plural = verbose_name
+        verbose_name_plural = "所有区块"
 
     def __str__(self):
         return smart_str('%d-%s' % (self.id, self.hash))
