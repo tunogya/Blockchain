@@ -1,7 +1,7 @@
 # **米奇喵喵币**
 **MiKi Minami Coin**
 
-使用Django开发的区块链项目。
+![coin](design/coin_with_font.png)
 
 ## REST API参考
 
@@ -24,3 +24,5 @@
 
        $ docker-compose down
 
+## 设计稿
+    设计稿使用Sketch，文件:[MMC.sketch](design/MMC.sketch)。
