@@ -10,7 +10,6 @@ class Node(models.Model):
         primary_key=True,
         default=uuid.uuid1,
         max_length=36,
-        editable=False,
     )
 
     parsed_url = models.URLField(

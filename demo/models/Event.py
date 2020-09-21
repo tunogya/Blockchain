@@ -16,7 +16,6 @@ class Event(models.Model):
     name = models.CharField(
         '事件名称',
         max_length=32,
-        editable=False,
     )
 
     type = models.CharField(
@@ -28,13 +27,11 @@ class Event(models.Model):
             ('Contract', 'Contract'),
             ('Block', 'Block'),
         ),
-        editable=False,
     )
 
     content = models.CharField(
         '当 EventType 为 “Contract” 时，为经过Base64编码的智能合约事件内容',
         max_length=256,
-        editable=False,
     )
 
     class Meta:
