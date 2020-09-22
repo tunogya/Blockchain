@@ -1,37 +1,25 @@
-## Welcome to GitHub Pages
+# **米奇喵喵币**
+**MiKi Minami Coin**
 
-You can use the [editor on GitHub](https://github.com/tunogya/Blockchain/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+![coin](design/coin_full.png)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## REST API参考
+   见[REST API参考](demo/Readme.md)
 
-### Markdown
+## Usage
+1. Change the ports in [docker-compose.yml](docker-compose.yml).
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+    | application name | host-port | container-port |
+    |------------------|-----------|----------------|
+    | app              | 8000      | 8000           |
+    | db               | 3306      | 3306           |
+    | nginx            | 80/443    | 8000           |
+        
+2. Run the docker.
+       $ docker-compose up
+ 
+3. Stop the docker.
+       $ docker-compose down
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/tunogya/Blockchain/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+## 设计稿
+   设计稿使用Sketch，文件:[MMC.sketch](design/MMC.sketch)。
