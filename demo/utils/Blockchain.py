@@ -1,8 +1,10 @@
 import hashlib
 import json
-from datetime import time
+import time
 from urllib.parse import urlparse
 from django.contrib.sites import requests
+import binascii
+from demo.models.Block import Block
 
 '''
     Blockchain类用来管理链条，它能存储交易，加入新块等。
@@ -17,23 +19,49 @@ class Blockchain(object):
         self.nodes = set()
 
     # Creates a new Block and adds it to the chain
-    def new_block(self, proof, previous_hash=None):
+    def new_block(self, data, proof, previous_hash=None):
         # 一个区块的结构
         block = {
             # 索引
             'index': len(self.chain) + 1,
-            # Unix时间戳
-            'timestamp': time(),
-            # 交易列表
-            'transactions': self.current_transactions,
-            # 工作量证明
-            'proof': proof,
             # 前一个区块的Hash值
             'previous_hash': previous_hash or self.hash(self.chain[-1]),
+            # Unix时间戳
+            'create_time': int(time.time()),
+            # 交易列表
+            'transactions': self.current_transactions,
+            # 当区块为配置块时，该值为区块内容 common.Block
+            'data': data,
+            # 工作量证明
+            'proof': proof,
         }
+        # 将当前的交易列表清空
         self.current_transactions = []
+        # 将当前区块上链
         self.chain.append(block)
+        # 将当前区块保存到数据库
+        self.save_block_to_db(block)
+        # 返回当前区块
         return block
+
+    # 将区块保存到数据库，保存成功则返回 True
+    def save_block_to_db(self, block):
+        # 将Block插入到数据库
+        _block = Block(
+            index=block['index'],
+            hash=self.hash(block),
+            previous_hash=block['previous_hash'],
+            create_time=block['create_time'],
+            transactions=block['transactions'],
+            data=block['data'],
+            proof=block['proof'],
+        )
+        try:
+            _block.save()
+        except Exception as e:
+            print(str(e))
+            return False
+        return True
 
     # Adds a new transaction to the list of transactions
     def new_transaction(self, sender, recipient, amount):
