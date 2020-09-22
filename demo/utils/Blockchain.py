@@ -3,8 +3,8 @@ import json
 import time
 from urllib.parse import urlparse
 from django.contrib.sites import requests
-import binascii
 from demo.models.Block import Block
+from demo.models.Transaction import Transaction
 
 '''
     Blockchain类用来管理链条，它能存储交易，加入新块等。
@@ -46,7 +46,6 @@ class Blockchain(object):
 
     # 将区块保存到数据库，保存成功则返回 True
     def save_block_to_db(self, block):
-        # 将Block插入到数据库
         _block = Block(
             index=block['index'],
             hash=self.hash(block),
@@ -56,21 +55,48 @@ class Blockchain(object):
             data=block['data'],
             proof=block['proof'],
         )
+
         try:
             _block.save()
         except Exception as e:
             print(str(e))
             return False
+
         return True
 
     # Adds a new transaction to the list of transactions
-    def new_transaction(self, sender, recipient, amount):
-        self.current_transactions.append({
-            'sender': sender,
-            'recipient': recipient,
-            'amount': amount,
-        })
+    def new_transaction(self, state, events, data):
+        transaction = {
+            # '交易状态，”VALID” 表示合法交易，其它值表示非法交易',
+            'state': state,
+            # '交易所产生的区块链事件列表',
+            'events': events,
+            # '交易的详细内容，数据结构为交易中的 common.Payload',
+            'data': data,
+        }
+        # 将当前交易插入到列表
+        self.current_transactions.append(transaction)
+        # 将交易保存到数据库
+        self.save_transcation_to_db(transaction)
+        # 返回下一个区块的块高
         return self.last_block['index'] + 1
+
+    # 保存交易到数据库
+    @staticmethod
+    def save_transcation_to_db(transaction):
+        _transcation = Transaction(
+            state=transaction['state'],
+            events=transaction['events'],
+            data=transaction['data'],
+        )
+
+        try:
+            _transcation.save()
+        except Exception as e:
+            print(str(e))
+            return False
+
+        return True
 
     # Hashes a Block
     @staticmethod
@@ -81,7 +107,7 @@ class Blockchain(object):
     # Returns the last Block in the chain
     @property
     def last_block(self):
-        return self.chain[-1]
+        return Block.objects.last()
 
     # PoW
     def proof_of_work(self, last_proof):
@@ -96,6 +122,7 @@ class Blockchain(object):
     def valid_proof(last_proof, proof):
         guess = str(last_proof * proof).encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
+
         return guess_hash[:5] == "00000"
 
     # 检查是否是有效链，遍历每个块验证hash和proof
