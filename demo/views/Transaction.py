@@ -1,32 +1,42 @@
-from uuid import uuid4
-from django.http import HttpResponse
-from rest_framework.views import APIView
-
-from demo.utils.Blockchain import Blockchain
-import json
-
-node_identifier = str(uuid4()).replace('-', '')
-blockchain = Blockchain()
+from rest_framework import mixins
+from rest_framework import generics
+from demo.serializers import TransactionSerializer
+from demo.models.Transaction import Transaction
 
 
 # 交易
-class TransactionList(APIView):
+class TransactionList(mixins.ListModelMixin,
+                      mixins.CreateModelMixin,
+                      generics.GenericAPIView):
+
+    serializer_class = TransactionSerializer
+    queryset = Transaction.objects.all()
+    filterset_fields = ['id', 'state']
+
     # 返回所有交易
-    def get(self, request):
-        return None
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
-    # 创建一个交易并添加到区块
-    def post(self, request):
-        values = json.loads(request.body.decode('utf-8'))
-        required = ['sender', 'recipient', 'amount']
-        if not all(k in values for k in required):
-            return 'Missing values'
-        index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
-        print(index)
-        response = {'message': 'Transaction will be added to Block %s' % index}
-        return HttpResponse(json.dumps(response))
+    # 创建一个交易
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
 
 
-class TransactionDetail(APIView):
-    def get(self, request):
-        return None
+class TransactionDetail(mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  generics.GenericAPIView):
+
+    serializer_class = TransactionSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
