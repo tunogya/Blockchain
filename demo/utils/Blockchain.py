@@ -18,19 +18,17 @@ class Blockchain(object):
         self.nodes = set()
 
     # Creates a new Block and adds it to the chain
-    def new_block(self, data, proof, previous_hash=None):
+    def new_block(self, proof, previous_hash=None):
         # 一个区块的结构
         block = {
             # 索引
-            'index': len(self.chain) + 1,
+            'index': Block.objects.all().count() + 1,
             # 前一个区块的Hash值
-            'previous_hash': previous_hash or self.hash(self.chain[-1]),
+            'previous_hash': previous_hash or self.last_block.hash,
             # Unix时间戳
             'create_time': int(time.time()),
             # 交易列表
             'transactions': self.current_transactions,
-            # 当区块为配置块时，该值为区块内容 common.Block
-            'data': data,
             # 工作量证明
             'proof': proof,
         }

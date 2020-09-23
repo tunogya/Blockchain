@@ -34,14 +34,17 @@ class BlockList(mixins.ListModelMixin,
         last_proof = last_block['proof']
         proof = blockchain.proof_of_work(last_proof)
         print(proof)
+        state = "VALID"
+        events = []
+        data = ""
         blockchain.new_transaction(
-            sender="0",
-            recipient=node_identifier,
-            amount=1,
+            state=state,
+            events=events,
+            data=data,
         )
 
         # Forge the new Block by adding it to the chain
-        block = blockchain.new_block(proof)
+        block = blockchain.new_block(proof=proof)
 
         response = {
             'message': "New Block Forged",
