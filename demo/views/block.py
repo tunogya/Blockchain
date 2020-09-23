@@ -4,12 +4,12 @@ from rest_framework import mixins
 from rest_framework import generics
 from demo.serializers import BlockSerializer
 
-from demo.utils.Blockchain import Blockchain
+# from demo.utils.Blockchain import Blockchain
 import json
 from demo.models.block import Block
 
 node_identifier = str(uuid4()).replace('-', '')
-blockchain = Blockchain()
+# blockchain = Blockchain()
 
 
 class BlockList(mixins.ListModelMixin,
@@ -29,32 +29,32 @@ class BlockList(mixins.ListModelMixin,
         return HttpResponse(json.dumps(response))
 
     # 请求服务器挖掘新的区块
-    def post(self, request):
-        last_block = blockchain.last_block
-        last_proof = last_block['proof']
-        proof = blockchain.proof_of_work(last_proof)
-        print(proof)
-        state = "VALID"
-        events = []
-        data = ""
-        blockchain.new_transaction(
-            state=state,
-            events=events,
-            data=data,
-        )
-
-        # Forge the new Block by adding it to the chain
-        block = blockchain.new_block(proof=proof)
-
-        response = {
-            'message': "New Block Forged",
-            'index': block['index'],
-            'transactions': block['transactions'],
-            'proof': block['proof'],
-            'previous_hash': block['previous_hash'],
-        }
-        print(response)
-        return HttpResponse(json.dumps(response))
+    # def post(self, request):
+    #     last_block = blockchain.last_block
+    #     last_proof = last_block['proof']
+    #     proof = blockchain.proof_of_work(last_proof)
+    #     print(proof)
+    #     state = "VALID"
+    #     events = []
+    #     data = ""
+    #     blockchain.new_transaction(
+    #         state=state,
+    #         events=events,
+    #         data=data,
+    #     )
+    #
+    #     # Forge the new Block by adding it to the chain
+    #     block = blockchain.new_block(proof=proof)
+    #
+    #     response = {
+    #         'message': "New Block Forged",
+    #         'index': block['index'],
+    #         'transactions': block['transactions'],
+    #         'proof': block['proof'],
+    #         'previous_hash': block['previous_hash'],
+    #     }
+    #     print(response)
+    #     return HttpResponse(json.dumps(response))
 
 
 class BlockDetail(mixins.RetrieveModelMixin,
