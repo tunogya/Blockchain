@@ -11,12 +11,12 @@ class Block(models.Model):
 
     hash = models.CharField(
         'hex 编码后的当前区块 hash 值',
-        max_length=32,
+        max_length=64,
     )
 
     previous_hash = models.CharField(
         'hex 编码后的上一区块 hash 值',
-        max_length=32,
+        max_length=64,
     )
 
     create_time = models.IntegerField(
@@ -25,10 +25,6 @@ class Block(models.Model):
 
     transactions = models.JSONField(
         '当前区块中，包含的所有交易的交易ID列表',
-    )
-
-    data = models.JSONField(
-        '当区块为配置块时，该值为区块内容 common.Block',
     )
 
     proof = models.IntegerField(
