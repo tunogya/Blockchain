@@ -98,7 +98,7 @@ DATABASES = {
         'NAME': 'blockchain',
         'USER': 'root',
         'PASSWORD': 'password',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'},
     }
