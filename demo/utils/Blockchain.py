@@ -3,8 +3,8 @@ import json
 import time
 from urllib.parse import urlparse
 from django.contrib.sites import requests
-from demo.models.Block import Block
-from demo.models.Transaction import Transaction
+from demo.models.block import Block
+from demo.models.transaction import Transaction
 
 '''
     Blockchain类用来管理链条，它能存储交易，加入新块等。

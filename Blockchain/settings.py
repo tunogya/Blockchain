@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'demo.apps.DemoConfig',
+    'demo',
     'rest_framework',
     'django_filters',
 ]
@@ -98,7 +98,7 @@ DATABASES = {
         'NAME': 'blockchain',
         'USER': 'root',
         'PASSWORD': 'password',
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'},
     }

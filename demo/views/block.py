@@ -6,7 +6,7 @@ from demo.serializers import BlockSerializer
 
 from demo.utils.Blockchain import Blockchain
 import json
-from demo.models.Block import Block
+from demo.models.block import Block
 
 node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()

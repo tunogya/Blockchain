@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from demo.models.Block import Block
-from demo.models.Event import Event
-from demo.models.Transaction import Transaction
-from demo.models.Node import Node
+from demo.models.block import Block
+from demo.models.event import Event
+from demo.models.transaction import Transaction
+from demo.models.node import Node
 
 
 class BlockSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 from rest_framework import mixins
 from rest_framework import generics
 from demo.serializers import TransactionSerializer
-from demo.models.Transaction import Transaction
+from demo.models.transaction import Transaction
 
 
 # 交易

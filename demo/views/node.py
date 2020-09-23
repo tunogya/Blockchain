@@ -1,7 +1,7 @@
-from demo.models.Event import Event
+from demo.models.node import Node
 from rest_framework import mixins
 from rest_framework import generics
-from demo.serializers import EventSerializer
+from demo.serializers import NodeSerializer
 
 
 # 节点列表
@@ -9,9 +9,9 @@ class NodeList(mixins.ListModelMixin,
                mixins.CreateModelMixin,
                generics.GenericAPIView):
 
-    serializer_class = EventSerializer
-    queryset = Event.objects.all()
-    filterset_fields = ['id', 'name', 'type']
+    serializer_class = NodeSerializer
+    queryset = Node.objects.all()
+    filterset_fields = ['id']
 
     # 返回所有节点
     def get(self, request, *args, **kwargs):
@@ -27,7 +27,7 @@ class NodeDetail(mixins.RetrieveModelMixin,
                  mixins.DestroyModelMixin,
                  generics.GenericAPIView):
 
-    serializer_class = EventSerializer
+    serializer_class = NodeSerializer
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
