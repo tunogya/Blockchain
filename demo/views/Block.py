@@ -1,20 +1,30 @@
 from uuid import uuid4
 from django.http import HttpResponse
-from rest_framework.views import APIView
+from rest_framework import mixins
+from rest_framework import generics
+from demo.serializers import BlockSerializer
 
 from demo.utils.Blockchain import Blockchain
 import json
+from demo.models.Block import Block
 
 node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()
 
 
-class BlockList(APIView):
+class BlockList(mixins.ListModelMixin,
+                mixins.CreateModelMixin,
+                generics.GenericAPIView,):
+    serializer_class = BlockSerializer
+    queryset = Block.objects.all()
+    filterset_fields = ['index', 'hash', 'previous_hash', 'create_time', 'transactions', 'proof']
+
     # 返回整个区块链
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
+        chain = self.list(request, *args, **kwargs)
         response = {
-            'chain': blockchain.chain,
-            'length': len(blockchain.chain),
+            'chain': chain,
+            'length': Block.objects.all().count(),
         }
         return HttpResponse(json.dumps(response))
 
@@ -44,6 +54,20 @@ class BlockList(APIView):
         return HttpResponse(json.dumps(response))
 
 
-class BlockDetail(APIView):
-    def get(self, request):
-        return None
+class BlockDetail(mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  generics.GenericAPIView):
+    serializer_class = BlockSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)

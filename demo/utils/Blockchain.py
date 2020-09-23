@@ -13,7 +13,6 @@ from demo.models.Transaction import Transaction
 
 class Blockchain(object):
     def __init__(self):
-        self.chain = []
         self.current_transactions = []
         self.new_block(previous_hash=1, proof=100)
         self.nodes = set()
@@ -37,8 +36,6 @@ class Blockchain(object):
         }
         # 将当前的交易列表清空
         self.current_transactions = []
-        # 将当前区块上链
-        self.chain.append(block)
         # 将当前区块保存到数据库
         self.save_block_to_db(block)
         # 返回当前区块
@@ -126,16 +123,16 @@ class Blockchain(object):
         return guess_hash[:5] == "00000"
 
     # 检查是否是有效链，遍历每个块验证hash和proof
-    def valid_chain(self, chain):
-        last_block = chain[0]
+    def valid_chain(self):
+        last_block = Block.objects.get(index=1)
         current_index = 1
-        while current_index < len(chain):
-            block = chain[current_index]
-            if block['previous_hash'] != self.hash(last_block):
+        while current_index < Block.objects.all().count():
+            block = Block.objects.get(index=current_index)
+            if block.previous_hash != last_block.hash:
                 return False
 
             # Check that the Proof of Work is correct
-            if not self.valid_proof(last_block['proof'], block['proof']):
+            if not self.valid_proof(last_block.proof, block.proof):
                 return False
 
             last_block = block
@@ -148,23 +145,24 @@ class Blockchain(object):
         neighbours = self.nodes
         new_chain = None
 
-        max_length = len(self.chain)
+        max_length = Block.objects.all().count()
 
         for node in neighbours:
-            response = requests.get('http://%s/chain' % node)
+            response = requests.get('http://%s/blocks/' % node)
 
             if response.status_code == 200:
                 length = json.loads(response)['length']
                 chain = json.loads(response)['chain']
 
                 # Check if the length is longer and the chain is valid
-                if length > max_length and self.valid_chain(chain):
+                if length > max_length and self.valid_chain():
                     max_length = length
                     new_chain = chain
 
         # Replace our chain if we discovered a new, valid chain longer than ours
         if new_chain:
-            self.chain = new_chain
+            # 插入到数据库
+
             return True
 
         return False
