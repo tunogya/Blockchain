@@ -23,7 +23,7 @@ class Blockchain(object):
             # 索引
             'index': len(self.chain) + 1,
             # 前一个区块的Hash值
-            'previous_hash': previous_hash or self.last_block.hash,
+            'previous_hash': previous_hash or self.hash(self.last_block),
             # Unix时间戳
             'create_time': int(time.time()),
             # 交易列表
@@ -86,11 +86,11 @@ class Blockchain(object):
         current_index = 1
         while current_index < len(chain):
             block = chain[current_index]
-            if block.previous_hash != last_block.hash:
+            if block['previous_hash'] != last_block['hash']:
                 return False
 
             # Check that the Proof of Work is correct
-            if not self.valid_proof(last_block.proof, block.proof):
+            if not self.valid_proof(last_block['proof'], block['proof']):
                 return False
 
             last_block = block
