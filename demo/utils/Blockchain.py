@@ -13,7 +13,6 @@ class Blockchain(object):
     def __init__(self):
         self.chain = []
         self.current_transactions = []
-        self.new_block(previous_hash=1, proof=100)
         self.nodes = set()
 
     # Creates a new Block and adds it to the chain
@@ -36,6 +35,8 @@ class Blockchain(object):
         # 将当前区块上链
         self.chain.append(block)
         # 返回当前区块
+        print("新的区块：")
+        print(block)
         return block
 
     # Adds a new transaction to the list of transactions
@@ -51,6 +52,7 @@ class Blockchain(object):
         # 将当前交易插入到列表
         self.current_transactions.append(transaction)
         # 返回下一个区块的块高
+        print('下一个区块的块高:', self.last_block['index'] + 1)
         return self.last_block['index'] + 1
 
     # Hashes a Block
@@ -62,6 +64,8 @@ class Blockchain(object):
     # Returns the last Block in the chain
     @property
     def last_block(self):
+        print('last_block:')
+        print(self.chain[-1])
         return self.chain[-1]
 
     # PoW
@@ -69,7 +73,7 @@ class Blockchain(object):
         proof = 0
         while self.valid_proof(last_proof, proof) is False:
             proof += 1
-
+        print('proof:', proof)
         return proof
 
     # PoW验证，修改零开头的个数来控制难度
