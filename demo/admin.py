@@ -7,7 +7,7 @@ from demo.models.node import Node
 
 @admin.register(Block)
 class BlockAdmin(admin.ModelAdmin):
-    list_display = ['index', 'hash', 'previous_hash', 'create_time', 'proof']
+    list_display = ['index', 'create_time', 'hash', 'previous_hash', 'proof', 'transactions']
 
 
 @admin.register(Event)
