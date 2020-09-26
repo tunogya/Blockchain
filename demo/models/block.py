@@ -7,6 +7,7 @@ class Block(models.Model):
         '区块块高',
         primary_key=True,
         auto_created=True,
+        unique=True,
     )
 
     hash = models.CharField(
