@@ -1,15 +1,15 @@
 from uuid import uuid4
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from rest_framework import mixins
 from rest_framework import generics
 from demo.serializers import BlockSerializer
 
-# from demo.utils.Blockchain import Blockchain
+from demo.utils.Blockchain import Blockchain
 import json
 from demo.models.block import Block
 
 node_identifier = str(uuid4()).replace('-', '')
-# blockchain = Blockchain()
+blockchain = Blockchain()
 
 
 class BlockList(mixins.ListModelMixin,
@@ -21,40 +21,53 @@ class BlockList(mixins.ListModelMixin,
 
     # 返回整个区块链
     def get(self, request, *args, **kwargs):
-        chain = self.list(request, *args, **kwargs)
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+
         response = {
-            'chain': chain,
+            'chain': serializer.data,
             'length': Block.objects.all().count(),
         }
         return HttpResponse(json.dumps(response))
 
     # 请求服务器挖掘新的区块
-    # def post(self, request):
-    #     last_block = blockchain.last_block
-    #     last_proof = last_block['proof']
-    #     proof = blockchain.proof_of_work(last_proof)
-    #     print(proof)
-    #     state = "VALID"
-    #     events = []
-    #     data = ""
-    #     blockchain.new_transaction(
-    #         state=state,
-    #         events=events,
-    #         data=data,
-    #     )
-    #
-    #     # Forge the new Block by adding it to the chain
-    #     block = blockchain.new_block(proof=proof)
-    #
-    #     response = {
-    #         'message': "New Block Forged",
-    #         'index': block['index'],
-    #         'transactions': block['transactions'],
-    #         'proof': block['proof'],
-    #         'previous_hash': block['previous_hash'],
-    #     }
-    #     print(response)
-    #     return HttpResponse(json.dumps(response))
+    def post(self, request):
+        last_block = blockchain.last_block
+        last_proof = last_block['proof']
+        proof = blockchain.proof_of_work(last_proof)
+        print(proof)
+        # 创建新的区块
+        this_block = blockchain.new_block(proof=proof)
+        # 将区块保存到数据库
+        _block = Block(
+            index=this_block['index'],
+            hash=blockchain.hash(this_block),
+            previous_hash=this_block['previous_hash'],
+            create_time=this_block['create_time'],
+            transactions=this_block['transactions'],
+            proof=this_block['proof'],
+        )
+        try:
+            _block.save()
+        except Exception as e:
+            print(str(e))
+            return False
+
+        response = {
+            'message': "New Block Forged",
+            'index': this_block['index'],
+            'transactions': this_block['transactions'],
+            'proof': this_block['proof'],
+            'previous_hash': this_block['previous_hash'],
+        }
+        print(response)
+        return JsonResponse(response)
 
 
 class BlockDetail(mixins.RetrieveModelMixin,
