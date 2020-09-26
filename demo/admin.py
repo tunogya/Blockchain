@@ -10,16 +10,16 @@ class BlockAdmin(admin.ModelAdmin):
     list_display = ['index', 'hash', 'previous_hash', 'create_time', 'proof']
 
 
-@admin.register(Transaction)
+@admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'type', 'content']
 
 
-@admin.register(Event)
+@admin.register(Node)
 class NodeAdmin(admin.ModelAdmin):
     list_display = ['id', 'parsed_url']
 
 
-@admin.register(Node)
+@admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ['id', 'state', 'events', 'data']
